@@ -12,16 +12,15 @@ import win32con
 from mousekey import MouseKey  # https://pypi.org/project/mousekey/
 
 # SET THESE THINGS BEFORE YOU RUN THE SCRIPT
-CATCH_COUNT = 96  # Sell after you catch how many fish?  Backpack size minus slots used with equipment
+CATCH_COUNT = 6  # Sell after you catch how many fish?  Backpack size minus slots used with equipment
 FISHING_DELAY = .25  # .25 for main, .41 for perfect balance and total noob - Lower is faster
-FISHING_RANDOM = .2  # Random delay to add to casts to make less bannable, .2 or .1 for mains .05 for total noob.
-FISHING_POLE_SLOT = '1'  # What slot is fishing pole in?  Make sure it has quotes around it.  EX: "1" or "2"
+FISHING_RANDOM = .2  # Random delay to add to casts to make less ban-able, .2 or .1 for mains .05 for total noob.
 TIME_FOR_BUBBLES = 4  # Max time to wait after casting to detect bubbles.  Noobs might need 5 or 6
 SELL_ANYWHERE = True  # If you purchased sell anywhere.  Otherwise the script will exit.
 
 OPEN_CHESTS = False  # If you want to use this script to open chests only.  You'll need to set the coords below
 OPEN_CHEST_X = 922  # Use Mpos to get coords of the bottom of the white E box you need to press.  MUST BE WHITE
-OPEN_CHEST_Y = 511  # Same ^
+OPEN_CHEST_Y = 503  # Same ^
 
 # Script setup Mousekey
 mkey = MouseKey()
@@ -152,9 +151,8 @@ def reel(fish_count):
 def is_pole_selected():
 	# If fishing pole is not selected, select it
 	if not pyautogui.pixelMatchesColor(688, 935, (0, 213, 255)):
-		mkey.force_activate_window(10290540)
-		mkey.press_key(FISHING_POLE_SLOT, delay=.05)  # delay in seconds
-
+		x, y = random.randint(693, 700), random.randint(964, 974)
+		mclick(x, y)
 
 # Function to check the fish count
 def check_fish_count(fish_count):
@@ -222,6 +220,7 @@ def sell_fish():
 # OPEN_CHEST_X and OPEN_CHEST_Y
 if OPEN_CHESTS:
 	# Quick and dirty open chests.
+	mclick(697, 831)
 	while True:
 		if pyautogui.pixelMatchesColor(OPEN_CHEST_X, OPEN_CHEST_Y, (255, 255, 255)):
 			# Hold E
@@ -233,6 +232,8 @@ if OPEN_CHESTS:
 
 
 # Main loop to fish after checking that fishing pole is selected
+mclick(720, 569)
+time.sleep(2)
 is_pole_selected()
 fish_counter = 0
 while True:

@@ -1,3 +1,4 @@
 pyautogui==0.9.54
 pywin32==306
 mousekey==0.12
+keyboard
