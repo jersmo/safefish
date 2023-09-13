@@ -12,9 +12,10 @@ import win32con
 from mousekey import MouseKey  # https://pypi.org/project/mousekey/
 
 # SET THESE THINGS BEFORE YOU RUN THE SCRIPT
-CATCH_COUNT = 6  # Sell after you catch how many fish?  Backpack size minus slots used with equipment
+CATCH_COUNT = 96  # Sell after you catch how many fish?  Backpack size minus slots used with equipment
 FISHING_DELAY = .25  # .25 for main, .41 for perfect balance and total noob - Lower is faster
-FISHING_RANDOM = .2  # Random delay to add to casts to make less ban-able, .2 or .1 for mains .05 for total noob.
+FISHING_RANDOM = .2  # Random delay to add to casts to make less bannable, .2 or .1 for mains .05 for total noob.
+FISHING_POLE_SLOT = 1  # What slot is fishing pole in?
 TIME_FOR_BUBBLES = 4  # Max time to wait after casting to detect bubbles.  Noobs might need 5 or 6
 SELL_ANYWHERE = True  # If you purchased sell anywhere.  Otherwise the script will exit.
 
@@ -150,9 +151,11 @@ def reel(fish_count):
 # Function to check if fishing pole is selected and select if not
 def is_pole_selected():
 	# If fishing pole is not selected, select it
-	if not pyautogui.pixelMatchesColor(688, 935, (0, 213, 255)):
-		x, y = random.randint(693, 700), random.randint(964, 974)
-		mclick(x, y)
+	x1 = 688 + (85 * (FISHING_POLE_SLOT-1))
+	if not pyautogui.pixelMatchesColor(x1, 935, (0, 213, 255)):
+		x2, y2 = 693 + (85 * (FISHING_POLE_SLOT-1)), random.randint(964, 974)
+		mclick(x2, y2)
+
 
 # Function to check the fish count
 def check_fish_count(fish_count):
@@ -172,10 +175,6 @@ def check_fish_count(fish_count):
 
 # Function to sell fish or exit program
 def sell_fish():
-	# Stop fishing by clicking fishing pole
-	time.sleep(1)
-	mkey.force_activate_window(10290540)
-	mkey.press_key(FISHING_POLE_SLOT, delay=.05)  # delay in seconds
 	time.sleep(random.uniform(.25, .5))
 
 	# Click backpack
@@ -207,9 +206,6 @@ def sell_fish():
 	# Close backpack
 	x, y = random.randint(1397, 1400), random.randint(363, 366)
 	mclick(x, y)
-
-	# If fishing pole is not selected, select it
-	is_pole_selected()
 
 	time.sleep(random.uniform(.25, .5))
 	# Cast
