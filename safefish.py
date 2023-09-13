@@ -69,18 +69,12 @@ def mmove(x, y):
 # Function to check for air bubbles on the screen
 def check_air_bubbles():
 	s = pyautogui.screenshot()
-	for x in range(770, 1160):
-		for y in range(350, 730):
-			colorcode = (68, 252, 234)  # Blue bubbles
-			tempvar = False
-			for x2 in range(5):
-				if s.getpixel((x + x2, y)) == colorcode:
-					tempvar = True
-				else:
-					tempvar = False
-					break
-			if tempvar is True:
+	color = (68, 252, 234)
+	for x in range(770, 1160, 5):
+		for y in range(150, 530, 5):
+			if s.getpixel((x, y)) == color:
 				return True
+	return False
 
 
 # Function to wait for air bubbles on the screen
@@ -115,11 +109,15 @@ def wait_for_fish_on(timeout):
 # Checks if fish on the line
 def fish_on():
 	"""Detects if the fishing bar is up"""
-	# 821*806 location and color (53fa53  or RGB 83, 250, 83)
-	if pyautogui.pixelMatchesColor(810, 810, (251, 98, 76)):
-		return True
-	else:
-		return False
+	s = pyautogui.screenshot()
+	color = (83, 250, 83)  # Green Catch Bar
+	# Step every 5 pixels to save time
+	for x in range(820, 1080, 5):
+		for y in range(760, 860, 5):
+			if s.getpixel((x, y)) == color:
+				return True
+	# Return False at end of the loop
+	return False
 
 
 # Function to simulate a random cast single click
@@ -160,7 +158,7 @@ def is_pole_selected():
 # Function to check the fish count
 def check_fish_count(fish_count):
 	sold = False
-	if fish_count == CATCH_COUNT or pyautogui.pixel(826, 694) == (253, 0, 97):
+	if fish_count == CATCH_COUNT or is_bag_full():
 		if SELL_ANYWHERE:
 			print('Inventory full, selling...')
 			sell_fish()
@@ -212,6 +210,17 @@ def sell_fish():
 	mclick(960, 520)
 
 
+def is_bag_full():
+	"""Detects if the bag full message is up"""
+	s = pyautogui.screenshot()
+	color = (253, 0, 97)  # "Cannot Catch Fish Because Backpack is Full" message color
+	# Step every 2 pixels to save time
+	for x in range(570, 670, 2):
+		for y in range(650, 750, 2):
+			if s.getpixel((x, y)) == color:
+				return True
+	return False
+
 # Main loop for opening chests, must get pixel of the E button bottom border in white and store in global variable
 # OPEN_CHEST_X and OPEN_CHEST_Y
 if OPEN_CHESTS:
@@ -228,15 +237,15 @@ if OPEN_CHESTS:
 
 
 # Main loop to fish after checking that fishing pole is selected
-mclick(720, 569)
-time.sleep(2)
+mclick(720, 569)  # Click Window
+time.sleep(.5)
 is_pole_selected()
 fish_counter = 0
 while True:
 	# Cast
 	double_click_random_cast()
 
-	# Check for full inventory or fish sell needed
+	# Check for full inventory or sell fish if needed
 	fish_counter, reset = check_fish_count(fish_counter)
 	if reset:
 		continue
