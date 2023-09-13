@@ -19,9 +19,7 @@ FISHING_POLE_SLOT = 1  # What slot is fishing pole in?
 TIME_FOR_BUBBLES = 4  # Max time to wait after casting to detect bubbles.  Noobs might need 5 or 6
 SELL_ANYWHERE = True  # If you purchased sell anywhere.  Otherwise the script will exit.
 
-OPEN_CHESTS = False  # If you want to use this script to open chests only.  You'll need to set the coords below
-OPEN_CHEST_X = 922  # Use Mpos to get coords of the bottom of the white E box you need to press.  MUST BE WHITE
-OPEN_CHEST_Y = 503  # Same ^
+OPEN_CHESTS = False  # If you want to use this script to open chests only.  Try to get E over the back of your neck
 
 # Script setup Mousekey
 mkey = MouseKey()
@@ -221,18 +219,34 @@ def is_bag_full():
 				return True
 	return False
 
+
+def chest_ready():
+	color = (255, 255, 255)
+	s = pyautogui.screenshot()
+	for x in range(875, 1000, 5):
+		for y in range(500, 700, 5):
+			if s.getpixel((x, y)) == color:
+				return True
+	return False
+
+
 # Main loop for opening chests, must get pixel of the E button bottom border in white and store in global variable
 # OPEN_CHEST_X and OPEN_CHEST_Y
 if OPEN_CHESTS:
 	# Quick and dirty open chests.
 	mclick(697, 831)
 	while True:
-		if pyautogui.pixelMatchesColor(OPEN_CHEST_X, OPEN_CHEST_Y, (255, 255, 255)):
+		if chest_ready():
 			# Hold E
 			mkey.force_activate_window(10290540)
 			mkey.press_key('e', delay=2)  # delay in seconds
 			# Click buy
 			mclick(697, 831)
+			time.sleep(6)
+			if pyautogui.pixelMatchesColor(594, 314, (0, 213, 255)):
+				print('Ran out of money')
+				mclick(1442, 326)
+				exit()
 		time.sleep(.25)
 
 
