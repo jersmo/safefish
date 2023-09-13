@@ -24,7 +24,7 @@ This script provides automated mouse and keyboard actions to simulate fishing in
 1. Clone the repository:
 
 ```batch
-git clone https://github.com/Jsmo/safefish.git
+git clone https://github.com/jersmo/safefish.git
 ```
 
 2. Navigate to the project directory:
@@ -47,7 +47,7 @@ pip install -r requirements.txt
 CATCH_COUNT = 96  # Sell after you catch how many fish?  Backpack size minus slots used with equipment
 FISHING_DELAY = .25  # .25 for main, .41 for perfect balance and total noob - Lower is faster
 FISHING_RANDOM = .2  # Random delay to add to casts to make less bannable, .2 or .1 for mains .05 for total noob.
-FISHING_POLE_SLOT = '1'  # What slot is fishing pole in?  Make sure it has quotes around it.  EX: "1" or "2"
+FISHING_POLE_SLOT = 1  # What slot is fishing pole in?
 TIME_FOR_BUBBLES = 4  # Max time to wait after casting to detect bubbles.  Noobs might need 5 or 6
 SELL_ANYWHERE = True  # If you purchased sell anywhere.  Otherwise the script will exit.
 
