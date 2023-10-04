@@ -47,7 +47,7 @@ class GoFishMac:
 
         cls.sct = mss()
 
-        time.sleep(3)
+        time.sleep(1)
 
         # Function for human like mouse clicking
         def pyclick(x, y):
@@ -243,11 +243,13 @@ class GoFishMac:
 
         def chest_ready():
             color = (255, 255, 255)
-            s = pyautogui.screenshot()
+            s = screenshot(0)
             for x in range(875, 1000, 5):
                 for y in range(500, 700, 5):
                     if s.getpixel((x, y)) == color:
+                        print('chest ready')
                         return True
+            print('chest NOT ready')
             return False
 
         # Main loop for opening chests
@@ -257,10 +259,13 @@ class GoFishMac:
             while True:
                 if chest_ready():
                     # Hold E
+                    pyautogui.keyDown('e')
+                    time.sleep(2)
+                    pyautogui.keyUp('e')
                     #mkey.force_activate_window(10290540)
                     #mkey.press_key('e', delay=2)  # delay in seconds
                     # Click buy
-                    mclick(697, 831)
+                    mclick(607, 791)
                     time.sleep(6)
                     if pyautogui.pixelMatchesColor(594, 314, (0, 213, 255)):
                         print('Ran out of money')
